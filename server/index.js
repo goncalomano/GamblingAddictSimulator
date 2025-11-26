@@ -16,7 +16,9 @@ app.use('/api/characters', charactersRouter);
 if (process.env.NODE_ENV === 'production') {
   const clientPath = path.join(__dirname, '..', 'client', 'dist');
   app.use(express.static(clientPath));
-  app.get('*', (req, res) => {
+  app.use((req, res, next) => {
+    if (req.method !== 'GET') return next();
+    if (req.path.startsWith('/api')) return next();
     res.sendFile(path.join(clientPath, 'index.html'));
   });
 }
