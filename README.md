@@ -40,8 +40,10 @@ NANOBANANA_API_URL=https://api.nanobanana.pro/v1/videos
 Optional client variable (place in `client/.env`):
 
 ```
-VITE_API_URL=http://localhost:4000/api   # default when unset
+VITE_API_URL=http://localhost:4000/api   # overrides the default relative /api path
 ```
+
+> Tip: in hosted environments (e.g., Railway) you can simply set `URL=https://your-domain` and the frontend will automatically call `https://your-domain/api/...`. No extra `VITE_*` variables are necessary.
 
 ### Development workflow
 

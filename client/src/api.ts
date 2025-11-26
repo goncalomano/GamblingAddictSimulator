@@ -1,6 +1,13 @@
 import type { BlackjackHand, PlayerCharacter } from './types';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+function normalizeBase(base: string) {
+  return base.replace(/\/$/, '');
+}
+
+const envUrl = import.meta.env.VITE_API_URL
+  || (import.meta.env.URL ? `${normalizeBase(import.meta.env.URL)}/api` : null);
+
+const API_BASE = envUrl || '/api';
 
 type HandPayload = { hand: BlackjackHand | null; player: PlayerCharacter };
 
