@@ -1,4 +1,4 @@
-const { v4: uuid } = require('uuid');
+const { randomUUID } = require('node:crypto');
 const { generateFaceImage } = require('../services/faceGenerator');
 
 const INITIAL_CASH = 1000;
@@ -19,7 +19,7 @@ function pickInitialAssets() {
   const count = 3 + Math.floor(Math.random() * 2);
   return shuffled.slice(0, count).map((asset) => ({
     ...asset,
-    id: uuid(),
+    id: randomUUID(),
     isOwned: true,
   }));
 }
@@ -30,7 +30,7 @@ async function createPlayerCharacter(name) {
   const initialAssetValue = assets.reduce((sum, asset) => sum + asset.value, 0);
 
   return {
-    id: uuid(),
+    id: randomUUID(),
     name: name || 'Average Worker',
     faceImageUrl,
     cash: INITIAL_CASH,
