@@ -1,13 +1,33 @@
 import type { BlackjackHand, PlayerCharacter } from './types';
 
-function normalizeBase(base: string) {
-  return base.replace(/\/$/, '');
+function stripTrailingSlash(value: string) {
+  return value.replace(/\/+$/, '');
 }
 
-const envUrl = import.meta.env.VITE_API_URL
-  || (import.meta.env.URL ? `${normalizeBase(import.meta.env.URL)}/api` : null);
+function resolveBaseUrl() {
+  const direct = import.meta.env.VITE_API_URL;
+  if (direct) {
+    return stripTrailingSlash(direct);
+  }
 
-const API_BASE = envUrl || '/api';
+  const rawEnvUrl = import.meta.env.URL;
+  if (rawEnvUrl) {
+    try {
+      const parsed = new URL(rawEnvUrl);
+      return `${parsed.origin}/api`;
+    } catch {
+      return `${stripTrailingSlash(rawEnvUrl)}/api`;
+    }
+  }
+
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return `${window.location.origin}/api`;
+  }
+
+  return '/api';
+}
+
+const API_BASE = resolveBaseUrl();
 
 type HandPayload = { hand: BlackjackHand | null; player: PlayerCharacter };
 
